@@ -15,19 +15,42 @@
 			box-sizing:border-box;
 			height:100px;
 		}
-		input[type="submit"] {
+		ul {
+			list-style:none;
+			padding-left:0;
+			margin:0;
+		}
+		.menu { 
+			display:inline-block;
+			vertical-align:top;
+		}
+		.drop-down{
+			max-height:0;
+			overflow:hidden;
+			transition:max-height 0.5s ease-in-out;
+		}
+		.menu:hover .drop-down{
+			overflow:visible;
+			max-height:80px;
+
+		}
+		.menu p{ margin:0;}
+		.drop-down input{width:100%;}
+		.drop-down input, .menu p {
 			border:0;
 			padding:10px;
 			background:black;
 			color:white;
 			border-radius:2px;
-			transition: transform .3s ease-in-out;
+			transition: transform .3s ease-in-out, height .3s ease-in-out;
 		}
-		input[type="submit"]:hover {
+		.menu p:hover, .drop-down input:hover{
 			background:#eaeaea;
 			color:black;
 			transform: scale(1.3);
+			z-index:10;
 		}
+
 		.result {
 			margin:0 auto;
 			width:900px;
@@ -50,14 +73,39 @@
 		.result table tr:last-of-type, .result table tr td:last-of-type {
 			border:0;
 		}
+
 	</style>
 </head>
 <body>
 	<form action="" method="get">
-		<input type="submit" value="produse" name="produse">
-		<input type="submit" value="pc_uri"  name="pcuri">
-		<input type="submit" value="laptop_uri"  name="laptopuri">
-		<input type="submit" value="imprimante"  name="imprimante">
+		<div class="menu">
+		<p>Produse</p>
+		<ul class="drop-down">
+			<li><input type="submit" value="Show" name="produse"></li>
+			<li><input type="submit" value="Delete" name="produse"></li>
+		</ul>
+		</div>
+		<div class="menu">
+		<p>PC-uri</p>
+		<ul class="drop-down">
+			<li><input type="submit" value="Show"  name="pcuri"></li>
+			<li><input type="submit" value="Delete"  name="pcuri"></li>
+		</ul>
+		</div>
+		<div class="menu">
+		<p>Laptop-uri</p>
+		<ul class="drop-down">
+			<li><input type="submit" value="Show"  name="laptopuri"></li>
+			<li><input type="submit" value="Delete"  name="laptopuri"></li>
+		</ul>
+		</div>
+		<div class="menu">
+		<p>Imprimante</p>
+		<ul class="drop-down">
+			<li><input type="submit" value="Show"  name="imprimante"></li>
+			<li><input type="submit" value="Delete"  name="imprimante"></li>
+		</ul>
+		</div>
 	</form>
 	
 	<div class="result">
