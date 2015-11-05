@@ -1,3 +1,4 @@
+
 <html>
 <head>
 	<title>SGBD base</title>
@@ -5,7 +6,7 @@
 		body {
 			margin:0;
 		}
-		form {
+		.nav {
 			display:block;
 			background:#dddddd;
 			text-align:center;
@@ -77,7 +78,8 @@
 	</style>
 </head>
 <body>
-	<form action="" method="get">
+
+	<form class="nav" action="" method="get">
 		<div class="menu">
 		<p>Produse</p>
 		<ul class="drop-down">
@@ -106,25 +108,39 @@
 			<li><input type="submit" value="Delete"  name="imprimante"></li>
 		</ul>
 		</div>
-	</form>
+
 	
 	<div class="result">
 	<?php
-	
 		function showTableAll($connection, $table){
 			return mysqli_query($connection, "select * from ".$table); 
 		}
 		function printQueryResult($result){
 			echo "<table>";
 			while($row = $result->fetch_assoc()){
-				echo "<tr>";
+				if(isset($_GET["produse"])){
+					next($row);
+					echo "<tr><td><input type='checkbox' name=drecord[] value='".pos($row)."'>";
+					reset($row);
+				}
+				else {echo "<tr><td><input type='checkbox' name=drecord[] value='".pos($row)."'>";}
 				foreach($row as $column){
 					echo "<td>".$column."</td>";
 				}
-				echo "</tr>";
+				echo "</td></tr>";
 			}
 			echo "</table>";
 			return;
+		}
+		function deleteRecords($connection, $table, $keys){
+			foreach($keys as $key){
+				if(isset($_GET["produse"])){
+					$query = "DELETE FROM $table WHERE Model=$key";
+				} else {
+					$query = "DELETE FROM ".$table." WHERE Cod=".$key;
+				}
+				mysqli_query($connection, $query);
+			}
 		}
 	
 		$connection = mysqli_connect("localhost", "root", "", "bazasgbd");
@@ -134,17 +150,38 @@
 		
 		$result;
 		if(isset($_GET["produse"])) {
-			$result=showTableAll($connection, "produse");
+			if($_GET["produse"]=="Show"){
+				$result=showTableAll($connection, "produse");
+			} else {
+				deleteRecords($connection, "produse", $_GET["drecord"]);
+				$result=showTableAll($connection, "produse");
+			}
 		} else if(isset($_GET["pcuri"])) {
-			$result=showTableAll($connection, "pc_uri");
+			if($_GET["pcuri"]=="Show"){
+				$result=showTableAll($connection, "pc_uri");
+			} else {
+				deleteRecords($connection, "pc_uri", $_GET["drecord"]);
+				$result=showTableAll($connection, "pc_uri");
+			}
 		} else if(isset($_GET["laptopuri"])) {
-			$result=showTableAll($connection, "laptop_uri");
+			if($_GET["laptopuri"]=="Show"){
+				$result=showTableAll($connection, "laptop_uri");
+			} else {
+				deleteRecords($connection, "laptop_uri", $_GET["drecord"]);
+				$result=showTableAll($connection, "laptop_uri");
+			}
 		} else {
-			$result=showTableAll($connection, "imprimante");
+			if($_GET["imprimante"]=="Show"){
+				$result=showTableAll($connection, "imprimante");
+			} else {
+				deleteRecords($connection, "imprimante", $_GET["drecord"]);
+				$result=showTableAll($connection, "imprimante");
+			}
 		}
 		
 		printQueryResult($result);
 	?>
 	</div>
+	</form>
 </body>
 </html>
